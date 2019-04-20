@@ -15,5 +15,8 @@
   "bugs": {
     "url": "https://github.com/Robyrogers/restful-api-node-js/issues"
   },
-  "homepage": "https://github.com/Robyrogers/restful-api-node-js#readme"
+  "homepage": "https://github.com/Robyrogers/restful-api-node-js#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
 }
