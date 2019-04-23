@@ -5,9 +5,16 @@ const mongoose = require('mongoose')
 const Product = require('../models/products')
 
 router.get('/',(req,res,next)=>{
-  res.status(200).json({
-    message: "Hello from get request"
-  })
+  Product.find()
+    .exec()
+    .then(docs=>{
+      res.status(200).json(docs)
+    })
+    .catch(err=>{
+      res.status(500).json({
+        error: err
+      })
+    })
 })
 
 router.post('/',(req,res,next)=>{
@@ -20,34 +27,69 @@ router.post('/',(req,res,next)=>{
     .save()
     .then(result=>{
       console.log(result)
+      res.status(201).json({
+        message: "Handling post requests to /products",
+        createdProduct: product
+      })
     })
     .catch(err=>{
       console.log(err)
+      res.status(500).json({
+        error: err
+      })
     })
-  res.status(201).json({
-    message: "Handling post requests to /products",
-    createdProduct: product
-  })
 })
 
 router.get('/:productId',(req,res,next)=>{
   const id = req.params.productId
-  res.status(200).json({
-    message: `Yeahhhh it's a shitty product with id ${id}`
-  })
+  Product.findById(id)
+    .exec()
+    .then(doc=>{
+      console.log(doc)
+      if(doc!==null){
+        res.status(200).json(doc)
+      }else{
+        res.status(404).json({ message: "Product not Found" })
+      }
+    })
+    .catch(err=>{
+      res.status(500).json({
+        error: err
+      })
+    })
 })
 
 router.patch('/:productId',(req,res,next)=>{
   const id = req.params.productId
-  res.status(200).json({
-    message: `Updated product ${id}`
+  const updatedData = {}
+  Object.keys(req.body).forEach(key=>{
+    updatedData[key] = req.body[key]
   })
+  Product.updateOne({_id: id}, {...updatedData})
+    .exec()
+    .then(result=>{
+      console.log(result)
+      res.status(200).json(result)
+    })
+    .catch(err=>{
+      console.log(err)
+      res.status(500).json({
+        error: err
+      })
+    })
 })
 
 router.delete('/:productId',(req,res,next)=>{
   const id = req.params.productId
-  res.status(200).json({
-    message: `Just deleted shitty product with ${id}`
-  })
+  Product.remove({_id: id})
+    .exec()
+    .then(response=>{
+      res.status(200).json({response})
+    })
+    .catch(err=>{
+      res.status(500).json({
+        error: err
+      })
+    })
 })
 module.exports = router

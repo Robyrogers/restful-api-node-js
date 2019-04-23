@@ -4,7 +4,7 @@ const morgan = require('morgan')
 const mongoose = require('mongoose')
 
 mongoose.connect(
-    `mongodb+srv://Robyrogers:${process.env.MONGO_ATLAS_PW}@restful-api-node-js-raqxh.mongodb.net/test?retryWrites=true`,
+    `mongodb+srv://Robyrogers:${process.env.MONGO_ATLAS_PW}@restful-api-node-js-raqxh.mongodb.net/node-shop?retryWrites=true`,
     { useNewUrlParser: true }
   )
   .catch(err=>{
